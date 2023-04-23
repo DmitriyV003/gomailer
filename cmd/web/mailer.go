@@ -36,7 +36,22 @@ type Message struct {
 	Template    string
 }
 
+func (c *Config) listenForMail() {
+	for {
+		select {
+		case msg := <-c.Mailer.MailerChan:
+			go c.Mailer.sendMail(msg, c.Mailer.ErrorChan)
+		case err := <-c.Mailer.ErrorChan:
+			c.ErrorLog.Print(err)
+		case <-c.Mailer.DoneChan:
+			return
+		}
+	}
+}
+
 func (m *Mail) sendMail(msg Message, errorChan chan error) {
+	defer m.Wait.Done()
+
 	if msg.Template == "" {
 		msg.Template = "mail"
 	}
