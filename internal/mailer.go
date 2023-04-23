@@ -1,4 +1,4 @@
-package main
+package mailer
 
 import (
 	"bytes"
@@ -36,7 +36,7 @@ type Message struct {
 	Template    string
 }
 
-func (c *Config) listenForMail() {
+func (c *Config) ListenForMail() {
 	for {
 		select {
 		case msg := <-c.Mailer.MailerChan:

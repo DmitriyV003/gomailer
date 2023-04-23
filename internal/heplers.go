@@ -1,4 +1,4 @@
-package main
+package mailer
 
 func (c *Config) sendMail(msg Message) {
 	c.Wait.Add(1)
